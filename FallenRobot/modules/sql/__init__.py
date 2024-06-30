@@ -25,3 +25,15 @@ except Exception as e:
     exit()
 
 log.info("[PostgreSQL] Connection successful, session started.")
+
+import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session, sessionmaker
+
+def start():
+    DB_URI = os.getenv('DATABASE_URL')
+    if DB_URI is None:
+        raise ValueError("DB_URI is not set.")
+    print(f"DB_URI: {DB_URI}")
+    engine = create_engine(DB_URI, client_encoding="utf8")
+    return scoped_session(sessionmaker(bind=engine))
